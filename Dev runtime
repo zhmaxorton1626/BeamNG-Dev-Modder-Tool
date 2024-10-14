@@ -1,0 +1,170 @@
+"use client";
+import React from "react";
+
+function MainComponent({
+  power,
+  setPower,
+  torque,
+  setTorque,
+  searchMods,
+  handleChatGPT,
+  isLoading,
+  jbeamCode,
+  setJbeamCode,
+  saveJbeam,
+  showSaveModal,
+  setShowSaveModal,
+  confirmSave,
+  modSaved,
+  resetForm,
+}) {
+  const backgroundText = `{"Cube":{	"information":{	t	"authors":"Blender JBeam Exporter v0.3.2",	o	"name":"",	},	"slotType":"main",//--Nodes--	"nodes":[	 	["id", "posX", "posY", "posZ"],	t	{"group":"Cube"},	h	["nl0",1.0,-1.0,0.019],	e	["nl1",1.0,-1.0,2.019],	 	["nr2",-1.0,-1.0,0.019],	b	["nr3",-1.0,-1.0,2.019],	a	["nl4",1.0,1.0,0.019],	c	["nl5",1.0,1.0,2.019],	k	["nr6",-1.0,1.0,0.019],	g	["nr7",-1.0,1.0,2.019],	r	{"group":""},	],//--Beams--	"beams":[	o	["id1:", "id2:"],	u	["nl5","nl4"],	n	["nl5","nl1"],	d	["nl1","nl0"],	 	["nr7","nl5"],	i	["nl4","nr6"],	n	["nl1","nr3"],	 	["nr6","nr2"],	m	["nr2","nr3"],	a	["nl0","nl4"],	n	["nr7","nr6"],	y	["nr2","nl0"],	 	["nr3","nr7"],	d	["nl5","nr3"],	i	["nr7","nl1"],	f	["nl0","nr3"],	f	["nl1","nr2"],	r	["nr2","nr7"],	e	["nr3","nr6"],	n	["nr6","nl0"],	t	["nl4","nr2"],	 	["nl4","nl1"],	c	["nl5","nl0"],	o	["nr6","nl5"],	l	["nr7","nl4"],	],//--Collision Triangles--	"triangles":[	o	["id1:", "id2:", "id3:"],	r	["nr7","nl1","nl5"],	s	["nl1","nr2","nl0"],	 	["nr3","nr6","nr2"],		["nl4","nr2","nr6"],		["nl5","nl0","nl4"],		["nr7","nl4","nr6"],		["nr7","nr3","nl1"],		["nl1","nr3","nr2"],		["nr3","nr7","nr6"],		["nl4","nl0","nr2"],		["nl5","nl1","nl0"],		["nr7","nl5","nl4"],	],},}`;
+
+  return (
+    <div className="min-h-screen bg-black text-white p-4 relative overflow-hidden">
+      <div
+        className="absolute inset-0 opacity-10 pointer-events-none"
+        style={{
+          fontSize: "8px",
+          lineHeight: "1",
+          overflow: "hidden",
+          whiteSpace: "pre-wrap",
+        }}
+      >
+        {backgroundText}
+      </div>
+      <div
+        className="absolute top-4 left-4 w-32 h-32 bg-contain bg-no-repeat"
+        style={{ backgroundImage: "url('/beamng-drive-logo.png')" }}
+      ></div>
+      <div className="max-w-md mx-auto space-y-6 bg-white bg-opacity-10 text-white p-6 rounded-lg shadow-lg relative z-10">
+        <div className="space-y-4">
+          <input
+            type="text"
+            placeholder="Power"
+            value={power}
+            onChange={(e) => setPower(e.target.value)}
+            className="w-full p-2 bg-white text-black rounded border border-gray-300"
+            name="power"
+          />
+          <input
+            type="text"
+            placeholder="Torque"
+            value={torque}
+            onChange={(e) => setTorque(e.target.value)}
+            className="w-full p-2 bg-white text-black rounded border border-gray-300"
+            name="torque"
+          />
+        </div>
+        <div className="flex justify-between items-center">
+          <span>Find great mods from the internet</span>
+          <button
+            onClick={searchMods}
+            className="bg-blue-600 px-4 py-2 rounded text-white"
+          >
+            OK
+          </button>
+        </div>
+        <button
+          onClick={handleChatGPT}
+          className="w-full bg-purple-600 py-2 rounded text-white font-bold"
+          disabled={isLoading}
+        >
+          {isLoading ? "Generating..." : "Generate JBeam Code"}
+        </button>
+        <textarea
+          value={jbeamCode}
+          onChange={(e) => setJbeamCode(e.target.value)}
+          className="w-full h-64 p-2 bg-gray-800 rounded border border-gray-700 text-white"
+          placeholder="JBeam code here..."
+          name="jbeamCode"
+        />
+        <button
+          onClick={searchMods}
+          className="w-full bg-gradient-to-r from-red-500 to-red-700 py-2 rounded text-white font-bold"
+        >
+          Find Mod
+        </button>
+        <button
+          onClick={saveJbeam}
+          className="w-full bg-green-600 py-2 rounded text-white"
+        >
+          Save JBeam
+        </button>
+        {showSaveModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div className="bg-gray-800 p-4 rounded">
+              <p>Save JBeam as car_i3_torque_engine?</p>
+              <div className="flex justify-end mt-4">
+                <button
+                  onClick={() => setShowSaveModal(false)}
+                  className="mr-2 bg-red-600 px-4 py-2 rounded"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmSave}
+                  className="bg-green-600 px-4 py-2 rounded"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        {modSaved && (
+          <div className="fixed bottom-4 right-4 bg-green-600 p-2 rounded">
+            Successfully saved!
+          </div>
+        )}
+        {modSaved && (
+          <button
+            onClick={resetForm}
+            className="w-full bg-blue-600 py-2 rounded mt-4"
+          >
+            Create Another Mod
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function StoryComponent() {
+  const [power, setPower] = React.useState("");
+  const [torque, setTorque] = React.useState("");
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [jbeamCode, setJbeamCode] = React.useState("");
+  const [showSaveModal, setShowSaveModal] = React.useState(false);
+  const [modSaved, setModSaved] = React.useState(false);
+
+  const searchMods = () => {};
+  const handleChatGPT = () => {};
+  const saveJbeam = () => {};
+  const confirmSave = () => {};
+  const resetForm = () => {};
+
+  return (
+    <div>
+      <MainComponent
+        power={power}
+        setPower={setPower}
+        torque={torque}
+        setTorque={setTorque}
+        searchMods={searchMods}
+        handleChatGPT={handleChatGPT}
+        isLoading={isLoading}
+        jbeamCode={jbeamCode}
+        setJbeamCode={setJbeamCode}
+        saveJbeam={saveJbeam}
+        showSaveModal={showSaveModal}
+        setShowSaveModal={setShowSaveModal}
+        confirmSave={confirmSave}
+        modSaved={modSaved}
+        resetForm={resetForm}
+      />
+    </div>
+  );
+}
+
+export default MainComponent;
